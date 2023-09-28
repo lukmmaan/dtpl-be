@@ -1,5 +1,6 @@
 // server.js
-const serverless = require("serverless-http");
+'use strict';
+const serverless = require('serverless-http');
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -9,7 +10,6 @@ const cors = require("cors"); // Import CORS middleware
 const app = express();
 const User = require("./models/userModel");
 const Surat = require("./models/suratModel");
-const handler = serverless(app);
 const router = express.Router();
 
 app.use(express.json()); // Middleware
@@ -17,9 +17,6 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors()); // Use CORS middleware
 app.use("/.netlify/functions/server", router); // path must route to lambda
-
-module.exports = app;
-module.exports.handler = serverless(app);
 
 // MongoDB Connection String with your database name
 const mongoURI =
@@ -262,3 +259,7 @@ router.put("/declineSurat", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+module.exports = app;
+module.exports.handler = serverless(app);

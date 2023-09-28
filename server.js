@@ -14,8 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors()); // Use CORS middleware
 
 // MongoDB Connection String with your database name
-const mongoURI =
-  "mongodb+srv://dtpl2022fc:dtpl2022fc@cluster0.hmopt9a.mongodb.net/?retryWrites=true&w=majority";
+const mongoURI ="";
 
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })

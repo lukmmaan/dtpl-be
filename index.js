@@ -1,7 +1,8 @@
-// server.js
-
+// Import packages
 const express = require("express");
+const home = require("./routes/home");
 const bcrypt = require("bcrypt");
+
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors"); // Import CORS middleware
@@ -29,6 +30,8 @@ mongoose
   .catch((e) => {
     console.log(e);
   });
+
+// Routes
 
 app.get("/allUser", async (req, res) => {
   try {

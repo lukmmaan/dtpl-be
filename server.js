@@ -10,13 +10,16 @@ const app = express();
 const User = require("./models/userModel");
 const Surat = require("./models/suratModel");
 const handler = serverless(app);
+const router = express.Router();
 
 app.use(express.json()); // Middleware
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors()); // Use CORS middleware
+app.use("/.netlify/functions/server", router); // path must route to lambda
 
-module.exports = { handler };
+module.exports = app;
+module.exports.handler = serverless(app);
 
 // MongoDB Connection String with your database name
 const mongoURI =
@@ -34,7 +37,7 @@ mongoose
     console.log(e);
   });
 
-app.get("/allUser", async (req, res) => {
+router.get("/allUser", async (req, res) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -44,7 +47,7 @@ app.get("/allUser", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -67,7 +70,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { fullName, email, password, confirmPassword } = req.body;
 
   try {
@@ -99,7 +102,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.put("/updateUser/:userId/:newRole", async (req, res) => {
+router.put("/updateUser/:userId/:newRole", async (req, res) => {
   const userId = req.params.userId;
   const newRole = req.params.newRole;
 
@@ -121,7 +124,7 @@ app.put("/updateUser/:userId/:newRole", async (req, res) => {
   }
 });
 
-app.post("/requestSurat", async (req, res) => {
+router.post("/requestSurat", async (req, res) => {
   const { fullName, email, nik, alamat, jenisSurat, keperluan, statusSurat } =
     req.body;
 
@@ -157,7 +160,7 @@ app.post("/requestSurat", async (req, res) => {
   }
 });
 
-app.get("/listSurat/:email", async (req, res) => {
+router.get("/listSurat/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
@@ -170,7 +173,7 @@ app.get("/listSurat/:email", async (req, res) => {
   }
 });
 
-app.get("/suratByStatus/:statusSurat", async (req, res) => {
+router.get("/suratByStatus/:statusSurat", async (req, res) => {
   const { statusSurat } = req.params;
 
   try {
@@ -189,7 +192,7 @@ app.get("/suratByStatus/:statusSurat", async (req, res) => {
   }
 });
 
-app.put("/approveSurat/:role", async (req, res) => {
+router.put("/approveSurat/:role", async (req, res) => {
   const { suratId, approvalName } = req.body;
   const { role } = req.params;
 
@@ -225,7 +228,7 @@ app.put("/approveSurat/:role", async (req, res) => {
   }
 });
 
-app.put("/declineSurat", async (req, res) => {
+router.put("/declineSurat", async (req, res) => {
   const { id, role, approvalName } = req.body;
 
   try {

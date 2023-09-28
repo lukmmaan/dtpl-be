@@ -1,5 +1,4 @@
 // server.js
-'use strict';
 
 const express = require("express");
 const bcrypt = require("bcrypt");
@@ -9,7 +8,6 @@ const cors = require("cors"); // Import CORS middleware
 const app = express();
 const User = require("./models/userModel");
 const Surat = require("./models/suratModel");
-const router = express.Router();
 
 app.use(express.json()); // Middleware
 app.use(bodyParser.json());
@@ -32,7 +30,7 @@ mongoose
     console.log(e);
   });
 
-router.get("/allUser", async (req, res) => {
+app.get("/allUser", async (req, res) => {
   try {
     const users = await User.find({});
     res.status(200).json(users);
@@ -42,7 +40,7 @@ router.get("/allUser", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -65,7 +63,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
+app.post("/register", async (req, res) => {
   const { fullName, email, password, confirmPassword } = req.body;
 
   try {
@@ -97,7 +95,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.put("/updateUser/:userId/:newRole", async (req, res) => {
+app.put("/updateUser/:userId/:newRole", async (req, res) => {
   const userId = req.params.userId;
   const newRole = req.params.newRole;
 
@@ -119,7 +117,7 @@ router.put("/updateUser/:userId/:newRole", async (req, res) => {
   }
 });
 
-router.post("/requestSurat", async (req, res) => {
+app.post("/requestSurat", async (req, res) => {
   const { fullName, email, nik, alamat, jenisSurat, keperluan, statusSurat } =
     req.body;
 
@@ -155,7 +153,7 @@ router.post("/requestSurat", async (req, res) => {
   }
 });
 
-router.get("/listSurat/:email", async (req, res) => {
+app.get("/listSurat/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
@@ -168,7 +166,7 @@ router.get("/listSurat/:email", async (req, res) => {
   }
 });
 
-router.get("/suratByStatus/:statusSurat", async (req, res) => {
+app.get("/suratByStatus/:statusSurat", async (req, res) => {
   const { statusSurat } = req.params;
 
   try {
@@ -187,7 +185,7 @@ router.get("/suratByStatus/:statusSurat", async (req, res) => {
   }
 });
 
-router.put("/approveSurat/:role", async (req, res) => {
+app.put("/approveSurat/:role", async (req, res) => {
   const { suratId, approvalName } = req.body;
   const { role } = req.params;
 
@@ -223,7 +221,7 @@ router.put("/approveSurat/:role", async (req, res) => {
   }
 });
 
-router.put("/declineSurat", async (req, res) => {
+app.put("/declineSurat", async (req, res) => {
   const { id, role, approvalName } = req.body;
 
   try {

@@ -1,5 +1,5 @@
 // server.js
-import serverless from 'serverless-http';
+const serverless = require("serverless-http");
 
 const express = require("express");
 const bcrypt = require("bcrypt");

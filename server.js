@@ -1,4 +1,6 @@
 // server.js
+import serverless from 'serverless-http';
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
@@ -12,6 +14,8 @@ app.use(express.json()); // Middleware
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors()); // Use CORS middleware
+
+export const handler = serverless(app);
 
 // MongoDB Connection String with your database name
 const mongoURI =

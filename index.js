@@ -306,3 +306,20 @@ app.post("/addEmployee", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+app.get('/getEmployee/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const employee = await Employee.findById(id);
+
+    if (employee) {
+      res.status(200).json(employee);
+    } else {
+      res.status(404).json({ message: 'Employee not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});

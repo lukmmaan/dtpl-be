@@ -9,6 +9,7 @@ const cors = require("cors"); // Import CORS middleware
 const app = express();
 const User = require("./models/userModel");
 const Surat = require("./models/suratModel");
+const Employee = require("./models/employeeModel");
 
 app.use(express.json()); // Middleware
 app.use(bodyParser.json());
@@ -257,5 +258,51 @@ app.put("/declineSurat", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.get("/allEmployees", async (req, res) => {
+  try {
+    const employees = await Employee.find({});
+
+    res.status(200).json(employees);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post("/addEmployee", async (req, res) => {
+  try {
+    const {
+      username,
+      firstName,
+      lastName,
+      email,
+      birthDate,
+      basicSalary,
+      status,
+      group,
+      description,
+    } = req.body;
+
+    const newEmployee = new Employee({
+      username,
+      firstName,
+      lastName,
+      email,
+      birthDate,
+      basicSalary,
+      status,
+      group,
+      description,
+    });
+
+    const savedEmployee = await newEmployee.save();
+
+    res.status(201).json(savedEmployee);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
   }
 });
